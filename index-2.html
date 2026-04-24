@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Infinity · Gargi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Sacramento&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:        #f4afc2;
+      --blush:       #f9d5de;
+      --blush-light: #fdeef2;
+      --cream:       #eee9a0;
+      --cream-light: #f8f6d0;
+      --sage:        #cde8b0;
+      --teal-light:  #9dcfc3;
+      --teal:        #5fa090;
+      --teal-dark:   #3d7a6a;
+      --white:       #fffcfa;
+      --dark:        #1e1e1e;
+      --mid:         #4a4a4a;
+      --soft:        #888;
+      --radius-sm:   1rem;
+      --radius:      1.8rem;
+      --radius-lg:   2.6rem;
+      --shadow-soft: 0 4px 30px rgba(95,160,144,.12);
+      --shadow-med:  0 10px 50px rgba(95,160,144,.2);
+      --shadow-lg:   0 20px 70px rgba(95,160,144,.28);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--dark);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════
+       ANIMATED MESH BACKGROUND
+    ══════════════════════════════════ */
+    .mesh-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .mesh-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 20%, rgba(249,213,222,.35) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 45% at 85% 75%, rgba(157,207,195,.28) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 35% at 55% 45%, rgba(238,233,160,.2) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 40% at 70% 10%, rgba(205,232,176,.2) 0%, transparent 60%);
+      animation: meshDrift 18s ease-in-out infinite alternate;
+    }
+    .mesh-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f4afc2' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    @keyframes meshDrift {
+      0%   { transform: scale(1) translate(0,0); }
+      50%  { transform: scale(1.04) translate(1%,2%); }
+      100% { transform: scale(1.02) translate(-1%,1%); }
+    }
+
+    /* ══════════════════════════════════
+       FLOATING PARTICLES
+    ══════════════════════════════════ */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute;
+      bottom: -40px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(0) scale(.8) rotate(0deg); }
+      10%  { opacity: .7; }
+      90%  { opacity: .4; }
+      100% { opacity: 0; transform: translateY(-105vh) scale(1.1) rotate(20deg); }
+    }
+
+    /* ══════════════════════════════════
+       PAGE WRAPPER
+    ══════════════════════════════════ */
+    .page {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 1.3rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════════
+       HERO
+    ══════════════════════════════════ */
+    .hero {
+      text-align: center;
+      padding: 5rem 1rem 2.5rem;
+      position: relative;
+    }
+    .hero::after {
+      content: '✦';
+      position: absolute;
+      bottom: -.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--teal-light);
+      font-size: .9rem;
+      opacity: .6;
+    }
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.1rem;
+      opacity: .8;
+    }
+    .hero-title {
+      font-family: 'Sacramento', cursive;
+      font-size: clamp(3.4rem, 12vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1;
+      background: linear-gradient(135deg, #e890aa 0%, var(--pink) 30%, var(--teal-light) 65%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 20px rgba(244,175,194,.4));
+      animation: titleGlow 4s ease-in-out infinite alternate;
+    }
+    @keyframes titleGlow {
+      from { filter: drop-shadow(0 2px 20px rgba(244,175,194,.35)); }
+      to   { filter: drop-shadow(0 4px 35px rgba(157,207,195,.5)); }
+    }
+    .hero-tagline {
+      margin-top: 1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--soft);
+      letter-spacing: .04em;
+    }
+
+    /* ══════════════════════════════════
+       ORNAMENT DIVIDER
+    ══════════════════════════════════ */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .8rem;
+      margin: 2.4rem 0;
+    }
+    .ornament-line {
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(to right, transparent, var(--teal-light), transparent);
+    }
+    .ornament-icon {
+      font-size: .85rem;
+      color: var(--pink);
+      animation: spinSlow 8s linear infinite;
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ══════════════════════════════════
+       TEXT BLOCKS
+    ══════════════════════════════════ */
+    .text-block {
+      font-family: 'Cormorant Garamond', serif;
+      margin: 2rem 0 1.4rem;
+      position: relative;
+    }
+
+    .tb-intro {
+      font-size: 1.32rem;
+      font-style: italic;
+      color: var(--mid);
+      text-align: center;
+      padding: 0 .5rem;
+    }
+
+    .tb-card {
+      background: rgba(255,252,250,.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(244,175,194,.3);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.6rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 1.18rem;
+      color: var(--mid);
+      font-style: italic;
+      line-height: 1.85;
+      position: relative;
+      overflow: hidden;
+    }
+    .tb-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .tb-card.pink::before  { background: linear-gradient(to right, var(--pink), var(--blush)); }
+    .tb-card.teal::before  { background: linear-gradient(to right, var(--teal-light), var(--teal)); }
+    .tb-card.cream::before { background: linear-gradient(to right, var(--cream), var(--sage)); }
+    .tb-card.sage::before  { background: linear-gradient(to right, var(--sage), var(--teal-light)); }
+
+    .tb-card .quote-mark {
+      font-family: 'Sacramento', cursive;
+      font-size: 4.5rem;
+      line-height: .5;
+      color: var(--pink);
+      opacity: .25;
+      position: absolute;
+      top: 1rem;
+      left: 1.2rem;
+      pointer-events: none;
+    }
+
+    .tb-card p { padding-left: .3rem; position: relative; z-index: 1; }
+    .tb-card em { color: var(--teal-dark); font-style: italic; font-weight: 600; }
+
+    .tb-final {
+      background: linear-gradient(135deg, var(--blush-light) 0%, rgba(157,207,195,.2) 100%);
+      border: 1.5px solid rgba(244,175,194,.4);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem 1.7rem;
+      text-align: center;
+      font-size: 1.08rem;
+      color: var(--teal-dark);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      line-height: 1.9;
+      box-shadow: var(--shadow-med);
+    }
+    .tb-final strong {
+      display: block;
+      font-family: 'Sacramento', cursive;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--pink);
+      margin-bottom: .4rem;
+      filter: drop-shadow(0 1px 8px rgba(244,175,194,.5));
+    }
+
+    /* ══════════════════════════════════
+       SONG GRID
+    ══════════════════════════════════ */
+    .song-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.4rem 0;
+    }
+
+    .song-card {
+      background: rgba(255,252,250,.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,255,255,.7);
+      display: flex;
+      flex-direction: column;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease;
+      position: relative;
+    }
+    .song-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
+      pointer-events: none;
+    }
+    .song-card:hover {
+      transform: translateY(-7px) scale(1.025);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .poster-box {
+      width: 100%;
+      aspect-ratio: 1/1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .poster-box img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .song-card:hover .poster-box img { transform: scale(1.07); }
+    .poster-box .emoji-fallback { position: relative; z-index: 1; }
+
+    .poster-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(30,30,30,.15), transparent);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .card-b1 .poster-box { background: linear-gradient(150deg, var(--pink) 0%, var(--blush) 60%, var(--cream-light) 100%); }
+    .card-b2 .poster-box { background: linear-gradient(150deg, var(--cream) 0%, var(--sage) 60%, var(--teal-light) 100%); }
+    .card-b3 .poster-box { background: linear-gradient(150deg, var(--sage) 0%, var(--teal-light) 60%, var(--blush) 100%); }
+    .card-b4 .poster-box { background: linear-gradient(150deg, var(--teal-light) 0%, var(--teal) 60%, var(--sage) 100%); }
+
+    .song-info {
+      padding: .8rem .9rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .song-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      opacity: .7;
+    }
+    .song-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .95rem;
+      font-style: italic;
+      color: var(--dark);
+      line-height: 1.3;
+    }
+    audio {
+      width: 100%;
+      height: 28px;
+      border-radius: 999px;
+      margin-top: .2rem;
+      accent-color: var(--teal);
+    }
+
+    /* ══════════════════════════════════
+       STORY IMAGE
+    ══════════════════════════════════ */
+    .story-img-wrap {
+      margin: 1.8rem 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .story-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.4);
+      border-radius: var(--radius-lg);
+      pointer-events: none;
+    }
+    .story-img-wrap img {
+      width: 100%; display: block;
+      object-fit: cover;
+      max-height: 300px;
+      transition: transform .6s ease;
+    }
+    .story-img-wrap:hover img { transform: scale(1.03); }
+    .img-placeholder {
+      width: 100%; height: 200px;
+      display: flex; align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+    }
+    .img-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      opacity: .6;
+      backdrop-filter: blur(2px);
+    }
+    .img-placeholder span { position: relative; z-index: 1; }
+    .img-placeholder.s1 { background: linear-gradient(135deg, var(--blush) 0%, var(--cream-light) 50%, var(--sage) 100%); }
+    .img-placeholder.s2 { background: linear-gradient(135deg, var(--sage) 0%, var(--teal-light) 50%, var(--blush-light) 100%); }
+
+    /* ══════════════════════════════════
+       FULL SONG CARD (song 5)
+    ══════════════════════════════════ */
+    .song-featured {
+      background: linear-gradient(135deg, rgba(249,213,222,.5) 0%, rgba(157,207,195,.3) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(244,175,194,.35);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.5rem;
+      margin: 1.4rem 0;
+      box-shadow: var(--shadow-med);
+      position: relative;
+      overflow: hidden;
+    }
+    .song-featured::before {
+      content: '♫';
+      position: absolute;
+      right: 1.2rem; top: .8rem;
+      font-size: 4rem;
+      opacity: .07;
+      color: var(--teal);
+      pointer-events: none;
+    }
+    .song-featured .song-label { font-size: .68rem; margin-bottom: .3rem; }
+    .song-featured .song-name { font-size: 1.2rem; margin-bottom: .6rem; }
+    .song-featured audio { height: 34px; }
+
+    /* ══════════════════════════════════
+       SECTION LABEL BADGE
+    ══════════════════════════════════ */
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(244,175,194,.18);
+      border: 1px solid rgba(244,175,194,.4);
+      border-radius: 999px;
+      padding: .25rem .85rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      margin-bottom: .8rem;
+    }
+    .section-badge.teal {
+      background: rgba(95,160,144,.1);
+      border-color: rgba(95,160,144,.3);
+    }
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    .footer {
+      text-align: center;
+      padding: 3rem 0 1.5rem;
+      position: relative;
+    }
+    .footer-heart {
+      font-family: 'Sacramento', cursive;
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, var(--pink), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: .3rem;
+    }
+    .footer-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .68rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    /* ══════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+
+    /* ══════════════════════════════════
+       CURSOR SPARKLE
+    ══════════════════════════════════ */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: .85rem;
+      animation: sparkleOut .7s ease forwards;
+    }
+    @keyframes sparkleOut {
+      0%   { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(.3) translateY(-22px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── BACKGROUNDS ── -->
+<div class="mesh-bg"></div>
+<div class="particles" id="particles"></div>
+
+<div class="page">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero reveal">
+    <p class="hero-eyebrow">a letter with no end</p>
+    <h1 class="hero-title">For Infinity</h1>
+    <p class="hero-tagline">written by your Monti, only for you 🌸</p>
+  </section>
+
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <span class="ornament-icon">✦</span>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ═══════════ H1 ═══════════ -->
+  <div class="text-block reveal">
+    <span class="section-badge">♡ for you</span>
+    <p class="tb-intro">
+      ik love is something u hv to think twice about.. and ik u relate to these songs
+    </p>
+  </div>
+
+  <!-- ═══════════ SONG GRID 1 ═══════════ -->
+  <div class="song-grid">
+    <div class="song-card card-b1 reveal reveal-delay-1">
+      <div class="poster-box">
+        <img src="poster1.jpg" alt="8 Letters poster" onerror="this.remove()" />
+        <span class="emoji-fallback">🎵</span>
+      </div>
+      <div class="song-info">
+        <span class="song-label">Song one</span>
+        <p class="song-name">8 Letters<br>Why Don't We</p>
+        <audio controls preload="none"><source src="song1.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+    <div class="song-card card-b2 reveal reveal-delay-2">
+      <div class="poster-box">
+        <img src="poster2.jpg" alt="Phobias poster" onerror="this.remove()" />
+        <span class="emoji-fallback">🎶</span>
+      </div>
+      <div class="song-info">
+        <span class="song-label">Song two</span>
+        <p class="song-name">Phobias<br>Jhonny Orleondo</p>
+        <audio controls preload="none"><source src="song2.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <span class="ornament-icon" style="animation-direction:reverse;">✿</span>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ═══════════ H2 ═══════════ -->
+  <div class="text-block reveal">
+    <div class="tb-card pink">
+      <span class="quote-mark">"</span>
+      <p>
+        and as u know if u relate to these songs then I'll love u like these songs..
+        my love for u is like a book.. but with infinite pages and the title of the book is <em>you</em>..
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ SONG GRID 2 ═══════════ -->
+  <div class="song-grid">
+    <div class="song-card card-b3 reveal reveal-delay-1">
+      <div class="poster-box">
+        <img src="poster3.jpg" alt="Perfect poster" onerror="this.remove()" />
+        <span class="emoji-fallback">🌹</span>
+      </div>
+      <div class="song-info">
+        <span class="song-label">Song three</span>
+        <p class="song-name">Perfect<br>Ed Sheeran</p>
+        <audio controls preload="none"><source src="song3.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+    <div class="song-card card-b4 reveal reveal-delay-2">
+      <div class="poster-box">
+        <img src="poster4.jpg" alt="Until I Found You poster" onerror="this.remove()" />
+        <span class="emoji-fallback">💫</span>
+      </div>
+      <div class="song-info">
+        <span class="song-label">Song four</span>
+        <p class="song-name">Until I Found You<br>Stephen Sanchez</p>
+        <audio controls preload="none"><source src="song4.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <span class="ornament-icon">✦</span>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ═══════════ H3 ═══════════ -->
+  <div class="text-block reveal">
+    <span class="section-badge teal">🌿 about us</span>
+    <div class="tb-card teal">
+      <span class="quote-mark">"</span>
+      <p>
+        ik long distance is not easy and whenever u think like we r lost somewhere
+        jst remember from where we started.. this is what i meant..
+        where ppl actually lose hope, from that very moment we started our journey..
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ S1 IMAGE ═══════════ -->
+  <div class="story-img-wrap reveal">
+    <img src="image1.jpg" alt="Our memory" onerror="this.remove()" />
+    <div class="img-placeholder s1"><span>🌸</span></div>
+  </div>
+
+  <!-- ═══════════ H4 ═══════════ -->
+  <div class="text-block reveal">
+    <div class="tb-card cream">
+      <span class="quote-mark">"</span>
+      <p>
+        ik its not easy but its not impossible.. I'll do long distance with u
+        rather than choosing something easy.. I'll choose us, choose u, daily,
+        each moment, no matter what..
+      </p>
+    </div>
+  </div>
+
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <span class="ornament-icon" style="animation-direction:reverse;">✿</span>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ═══════════ H5 ═══════════ -->
+  <div class="text-block reveal">
+    <span class="section-badge">🌷 forever</span>
+    <div class="tb-card sage">
+      <span class="quote-mark">"</span>
+      <p>
+        gargi lets prove each other.. lets prove the whole world that even in this generation
+        where love is rare, we'll prove the whole world that it can be forever with the one..
+        the one abt whom u r that sure to even not care abt the distance..
+        the one abt whom I'm damn sure is <em>you</em>..
+        i will never give up on us.. i jst want us forever..
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════ S2 IMAGE ═══════════ -->
+  <div class="story-img-wrap reveal">
+    <img src="image2.jpg" alt="Our story" onerror="this.remove()" />
+    <div class="img-placeholder s2"><span>🌿</span></div>
+  </div>
+
+  <!-- ═══════════ SONG 5 FEATURED ═══════════ -->
+  <div class="song-featured reveal">
+    <span class="song-label">Our Song</span>
+    <p class="song-name">Can't Help Falling in Love with You</p>
+    <audio controls preload="none" style="width:100%;"><source src="song5.mp3" type="audio/mpeg" /></audio>
+  </div>
+
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <span class="ornament-icon">✦</span>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ═══════════ H6 / FINAL ═══════════ -->
+  <div class="text-block reveal">
+    <div class="tb-final">
+      <strong>always &amp; forever</strong>
+      i love you forever.. jst always remember that ur amey, ur monti will never change his feelings for you..
+      he will be the same monti, the way he loves, the way he admires u will be the same forever..
+      and this is forever.. so u hv to deal with it and monti, forever 🫶
+    </div>
+  </div>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <div class="footer reveal">
+    <span class="footer-heart">made with love</span>
+    <p class="footer-sub">for gargi · from monti · always</p>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+  /* ═══ FLOATING PARTICLES ═══ */
+  const particlesEl = document.getElementById('particles');
+  const symbols = ['♡','🌸','✿','❀','✦','·','°','🌷','💗'];
+  function spawnParticle() {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 98 + 'vw';
+    const dur = 11 + Math.random() * 12;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = Math.random() * 3 + 's';
+    el.style.fontSize = (.55 + Math.random() * .75) + 'rem';
+    el.style.opacity = '0';
+    particlesEl.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 4) * 1000);
+  }
+  for (let i = 0; i < 16; i++) setTimeout(spawnParticle, i * 500);
+  setInterval(spawnParticle, 2200);
+
+  /* ═══ SCROLL REVEAL ═══ */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* ═══ CURSOR SPARKLE ═══ */
+  const sparklePool = ['✦','✿','♡','·','°','✨'];
+  let lastSparkle = 0;
+  document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastSparkle < 120) return;
+    lastSparkle = now;
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = sparklePool[Math.floor(Math.random() * sparklePool.length)];
+    s.style.left = e.clientX + (Math.random() * 16 - 8) + 'px';
+    s.style.top  = e.clientY + (Math.random() * 16 - 8) + 'px';
+    s.style.color = ['#f4afc2','#9dcfc3','#cde8b0','#eee9a0'][Math.floor(Math.random()*4)];
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 750);
+  });
+</script>
+</body>
+</html>
