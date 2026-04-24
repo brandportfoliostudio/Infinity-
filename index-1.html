@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Infinity · Gargi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:       #f4afc2;
+      --blush:      #f9d5de;
+      --cream:      #eee9a0;
+      --sage-light: #cde8b0;
+      --teal-light: #9dcfc3;
+      --teal:       #5fa090;
+      --white:      #fffaf8;
+      --dark:       #2e2e2e;
+      --font-display: 'Playfair Display', serif;
+      --font-body:    'Cormorant Garamond', serif;
+      --font-sans:    'Lato', sans-serif;
+      --radius:       1.5rem;
+      --shadow:       0 8px 40px rgba(95,160,144,.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--dark);
+      font-family: var(--font-body);
+      font-size: 1.18rem;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(244,175,194,.18) 0%, transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(157,207,195,.18) 0%, transparent 55%),
+        radial-gradient(circle at 50% 10%, rgba(238,233,160,.14) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 0 1.2rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1rem 2rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-sans);
+      font-size: .78rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: .6rem;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 8vw, 3.8rem);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--pink), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      margin-top: .8rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: #888;
+      font-family: var(--font-sans);
+    }
+
+    /* ── HEADINGS ── */
+    .h-block {
+      font-family: var(--font-display);
+      font-style: italic;
+      margin: 2.2rem 0 1.2rem;
+    }
+    .h1-text { font-size: 1.38rem; font-weight: 400; color: var(--dark); }
+    .h2-text {
+      font-size: 1.2rem; font-weight: 400; color: #444;
+      background: linear-gradient(to right, var(--blush), transparent);
+      padding: .7rem 1rem; border-radius: var(--radius);
+    }
+    .h3-text {
+      font-size: 1.15rem; color: #555;
+      border-left: 3px solid var(--teal-light);
+      padding-left: .9rem;
+    }
+    .h4-text { font-size: 1.1rem; color: #555; }
+    .h5-text { font-size: 1.08rem; color: #666; line-height: 1.9; }
+    .h6-text {
+      font-size: 1rem; color: var(--teal);
+      font-style: normal; font-family: var(--font-sans);
+      text-align: center;
+      background: linear-gradient(135deg, var(--blush) 0%, var(--teal-light) 100%);
+      padding: 1.2rem 1.4rem; border-radius: var(--radius); margin-top: 2rem;
+    }
+
+    /* ── SONG GRID ── */
+    .song-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+      margin: 1.2rem 0;
+    }
+
+    .song-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .song-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 16px 50px rgba(95,160,144,.25); }
+
+    .poster-box {
+      width: 100%;
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .poster-box img {
+      width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
+    }
+    .card-b1 .poster-box { background: linear-gradient(135deg, var(--pink), var(--blush)); }
+    .card-b2 .poster-box { background: linear-gradient(135deg, var(--cream), var(--sage-light)); }
+    .card-b3 .poster-box { background: linear-gradient(135deg, var(--sage-light), var(--teal-light)); }
+    .card-b4 .poster-box { background: linear-gradient(135deg, var(--teal-light), var(--teal)); }
+
+    .song-info { padding: .65rem .75rem .8rem; }
+    .song-title {
+      font-family: var(--font-sans);
+      font-size: .75rem; font-weight: 400;
+      color: var(--dark); margin-bottom: .45rem; line-height: 1.35;
+    }
+    audio { width: 100%; border-radius: 999px; height: 32px; }
+
+    /* ── STORY IMAGE ── */
+    .story-img-wrap {
+      margin: 1.5rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .story-img-wrap img { width: 100%; display: block; object-fit: cover; max-height: 320px; }
+    .img-placeholder {
+      width: 100%; height: 220px;
+      display: flex; align-items: center; justify-content: center; font-size: 3.5rem;
+    }
+    .img-placeholder.s1 { background: linear-gradient(135deg, var(--blush), var(--cream)); }
+    .img-placeholder.s2 { background: linear-gradient(135deg, var(--teal-light), var(--sage-light)); }
+
+    /* ── FULL WIDTH SONG ── */
+    .song-full {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem 1.1rem;
+      margin: 1.2rem 0;
+    }
+    .song-full .song-title { font-size: .88rem; margin-bottom: .5rem; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: .7rem;
+      margin: 1.8rem 0; opacity: .45;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--teal-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2rem 0 1rem;
+      font-family: var(--font-sans); font-size: .78rem;
+      color: #aaa; letter-spacing: .1em;
+    }
+
+    /* ── FLOATING HEARTS ── */
+    .hearts-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .heart {
+      position: absolute; bottom: -50px;
+      font-size: 1rem; opacity: 0;
+      animation: floatHeart linear infinite;
+    }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatHeart {
+      0%   { transform: translateY(0) rotate(0deg); opacity: .55; }
+      100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsContainer"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">a letter that lasts forever</p>
+    <h1>For Infinity</h1>
+    <p class="hero-sub">written by your Monti, only for you 🌸</p>
+  </section>
+
+  <!-- H1 -->
+  <p class="h-block h1-text">
+    ik love is something which is like u hv to think twice.. and ik u relate to these songs ♡
+  </p>
+
+  <!-- SONG GRID 1 -->
+  <div class="song-grid">
+    <div class="song-card card-b1">
+      <div class="poster-box">
+        <img src="poster1.jpg" alt="Song 1 poster" onerror="this.style.display='none'" />
+        🎵
+      </div>
+      <div class="song-info">
+        <p class="song-title">8 Letters — Why Don't We</p>
+        <audio controls preload="none"><source src="song1.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+    <div class="song-card card-b2">
+      <div class="poster-box">
+        <img src="poster2.jpg" alt="Song 2 poster" onerror="this.style.display='none'" />
+        🎶
+      </div>
+      <div class="song-info">
+        <p class="song-title">Phobias — Jhonny Orleondo</p>
+        <audio controls preload="none"><source src="song2.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>✦</span></div>
+
+  <!-- H2 -->
+  <p class="h-block h2-text">
+    and as u know if u relate to these songs then I'll love u like these songs.. my love for u is like a book.. but with infinite pages and the title of the book is <em>you</em>..
+  </p>
+
+  <!-- SONG GRID 2 -->
+  <div class="song-grid">
+    <div class="song-card card-b3">
+      <div class="poster-box">
+        <img src="poster3.jpg" alt="Song 3 poster" onerror="this.style.display='none'" />
+        🌹
+      </div>
+      <div class="song-info">
+        <p class="song-title">Perfect — Ed Sheeran</p>
+        <audio controls preload="none"><source src="song3.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+    <div class="song-card card-b4">
+      <div class="poster-box">
+        <img src="poster4.jpg" alt="Song 4 poster" onerror="this.style.display='none'" />
+        💫
+      </div>
+      <div class="song-info">
+        <p class="song-title">Until I Found You — Stephen Sanchez</p>
+        <audio controls preload="none"><source src="song4.mp3" type="audio/mpeg" /></audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>✦</span></div>
+
+  <!-- H3 -->
+  <p class="h-block h3-text">
+    ik long distance is not easy and whenever u think like we r lost somewhere jst remember from where we started — this is what i meant.. where ppl actually lose hope, from that very moment we started our journey..
+  </p>
+
+  <!-- S1 image -->
+  <div class="story-img-wrap">
+    <img src="image1.jpg" alt="Our memory" onerror="this.style.display='none'" />
+    <div class="img-placeholder s1">🌸</div>
+  </div>
+
+  <!-- H4 -->
+  <p class="h-block h4-text">
+    ik its not easy but its not impossible.. I'll do long distance with u rather than choosing something easy.. I'll choose us — choose u — daily, each moment, no matter what..
+  </p>
+
+  <div class="divider"><span>✦</span></div>
+
+  <!-- H5 -->
+  <p class="h-block h5-text">
+    gargi lets prove each other.. lets prove the whole world that even in this generation where love is rare — we'll prove the whole world that it can be forever with the one.. the one abt whom u r that sure to even not care abt the distance.. the one abt whom I'm damn sure is <em>you</em>.. i will never give up on us.. i jst want us forever..
+  </p>
+
+  <!-- S2 image -->
+  <div class="story-img-wrap">
+    <img src="image2.jpg" alt="Our story" onerror="this.style.display='none'" />
+    <div class="img-placeholder s2">🌿</div>
+  </div>
+
+  <!-- SONG 5 full width -->
+  <div class="song-full">
+    <p class="song-title">🎵 Can't Help Falling in Love with You</p>
+    <audio controls preload="none" style="width:100%;"><source src="song5.mp3" type="audio/mpeg" /></audio>
+  </div>
+
+  <div class="divider"><span>✦</span></div>
+
+  <!-- H6 -->
+  <p class="h-block h6-text">
+    i love you forever.. jst always remember that ur amey, ur monti will never change his feelings for you — he will be the same monti, the way he loves, the way he admires u will be the same forever.. and this is forever.. so u hv to deal with it — and monti, forever 🫶
+  </p>
+
+  <footer>made with every bit of love · for gargi · from monti ♡</footer>
+
+</div>
+
+<script>
+  /* Floating hearts */
+  const container = document.getElementById('heartsContainer');
+  const emojis = ['♡','❤','🌸','✿','♡','💗','🌷'];
+  function spawnHeart() {
+    const el = document.createElement('div');
+    el.className = 'heart';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    const dur = 9 + Math.random() * 10;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = Math.random() * 4 + 's';
+    el.style.fontSize = (.65 + Math.random() * .85) + 'rem';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), (dur + 5) * 1000);
+  }
+  for (let i = 0; i < 12; i++) setTimeout(spawnHeart, i * 700);
+  setInterval(spawnHeart, 2500);
+
+  /* Scroll reveal */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(
+    '.h-block, .song-card, .story-img-wrap, .song-full, .song-grid, .hero, .divider'
+  ).forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity .75s ease, transform .75s ease';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>
